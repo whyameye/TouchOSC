@@ -64,6 +64,9 @@
     <Reference Include="Sdgt 3.0">
       <HintPath>dlls\Sdgt 3.0.dll</HintPath>
     </Reference>
+    <Reference Include="SharpOSC">
+      <HintPath>dlls\SharpOSC.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
