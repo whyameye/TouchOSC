@@ -35,7 +35,7 @@
 
 ## seq
  - format: `/tuio/2Dcur fseq incrementing_frame_id`
- - *this is completely ignored in the code we are sending to so can be left out*
+ - *this appears to be used in the code for timing so is required*
 
 # TouchTable Pd notes
  - the code already scales everything to aspect ratio of 640/360 regardless of resolution
