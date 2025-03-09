@@ -37,6 +37,15 @@
  - format: `/tuio/2Dcur fseq incrementing_frame_id`
  - *this appears to be used in the code for timing so is required*
 
+## execution
+*following what appears to be the model from CCV 1.x back in the day from looking at sample data*
+ - send data at framerate
+ - for each frame:
+	- send any set messages
+	- send alive message
+	- send seq message
+- no need to send a set message on touchdown
+
 # TouchTable Pd notes
  - the code already scales everything to aspect ratio of 640/360 regardless of resolution
  - this C# code does not need to be concerned about resolution or aspect ratio. Just send x and y values between 0 and 1
