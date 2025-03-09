@@ -8,5 +8,5 @@
         AllowsTransparency="True"
         Background="Transparent"
         KeyDown="Window_KeyDown">
-    <Canvas x:Name="LayoutRoot" Background="#10FFFFFF"/>
+    <Canvas x:Name="LayoutRoot" Background="#01FFFFFF"/>
 </Window>

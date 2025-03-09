@@ -26,9 +26,9 @@ namespace Main
 
             TableManager.Initialize(this, LayoutRoot);
             TableControl tableControl = new TableControl();
-            tableControl.Opacity = .01;
+            tableControl.Opacity = 0;
             LayoutRoot.Children.Add(tableControl);
-            // this.Cursor = Cursors.None;
+            this.Cursor = Cursors.None;
             //TableManager.IsFullScreen = false;
         }
         private void Window_KeyDown(object sender, KeyEventArgs e)
