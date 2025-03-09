@@ -2,7 +2,7 @@
 
 ## class "TouchArea (TouchArea.cs)" is what captures the touches
   - red box defines the touch area
-  - constructor has this.opacity to set opacity
+  - constructor has `this.opacity` to set opacity
 
 ## set opacity of touches in MainWindow.xaml.cs:
   - instance of TableControl has property Opacity
