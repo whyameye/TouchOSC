@@ -21,10 +21,11 @@ namespace Main
 {
     class MainCanvas : Canvas
     {
-        private static int frameCount = 0;
+        private static long frameCount = 0;
         private static int[] blobIDs = new int[40]; // defaults to initial value of 0
         private static double[] blobXs = new double[40];
         private static double[] blobYs = new double[40];
+        private static long[] blobFrames = new long[40];
 
         private static SharpOSC.UDPSender oscSender = new SharpOSC.UDPSender("127.0.0.1", 3333);
 
@@ -50,9 +51,16 @@ namespace Main
             blobAlives.Add("alive");
             while (blobIDs[i] != 0)
             {
-                var message2 = new SharpOSC.OscMessage("/tuio/2Dcur", "set", blobIDs[i], (float) blobXs[i], (float) blobYs[i]);
-                oscSender.Send(message2);
-                blobAlives.Add(blobIDs[i]);
+                if ((blobFrames[i] + 10) < frameCount)
+                {
+                    removeBlob(i);
+                }
+                else
+                {
+                    var message2 = new SharpOSC.OscMessage("/tuio/2Dcur", "set", blobIDs[i], (float)blobXs[i], (float)blobYs[i]);
+                    oscSender.Send(message2);
+                    blobAlives.Add(blobIDs[i]);
+                }
                 i++;
             }
 
@@ -74,19 +82,32 @@ namespace Main
             int i = 0;
             while (blobIDs[i] != 0)
                 i++;
+            addBlob(i, e);
+        }
+
+        void addBlob(int i, libSMARTMultiTouch.Input.TouchContactEventArgs e) {
+            Debug.WriteLine("adding blob " + i);
             blobIDs[i] = e.TouchContact.ID;
             blobXs[i] = e.TouchContact.Position.X / 1920;
             blobYs[i] = e.TouchContact.Position.Y / 1080;
+            blobFrames[i] = frameCount;
         }
 
         void TouchAreaTouchMove(object sender, TouchContactEventArgs e)
         {
             int i = 0;
             while (blobIDs[i] != e.TouchContact.ID)
+                if (blobIDs[i] == 0)
+                {
+                    addBlob(i, e);
+                } else
                 i++;
             blobIDs[i] = e.TouchContact.ID;
             blobXs[i] = e.TouchContact.Position.X / 1920;
             blobYs[i] = e.TouchContact.Position.Y / 1080;
+            //Debug.WriteLine("MOVE id: " + e.TouchContact.ID + "X: " + e.TouchContact.Position.X + " Y: " + e.TouchContact.Position.Y);
+            blobFrames[i] = frameCount;
+
         }
 
         void TouchAreaTouchUp(object sender, libSMARTMultiTouch.Input.TouchContactEventArgs e)
@@ -95,6 +116,12 @@ namespace Main
             int i = 0;
             while (blobIDs[i] != e.TouchContact.ID)
                 i++;
+            removeBlob(i);
+        }
+
+        void removeBlob(int i)
+        {
+            Debug.WriteLine("removing blob " + i);
             int j = i + 1;
             while (blobIDs[j] != 0)
                 j++;
