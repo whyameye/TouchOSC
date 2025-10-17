@@ -21,12 +21,13 @@ namespace Main
 {
     class MainCanvas : Canvas
     {
-        private static long frameCount = 0;
-        private static int[] blobIDs = new int[40]; // defaults to initial value of 0
-        private static double[] blobXs = new double[40];
-        private static double[] blobYs = new double[40];
-        private static long[] blobFrames = new long[40];
+        private const int MAX_BLOBS = 40;
 
+        private static long frameCount = 0;
+        private static int[] blobIDs = new int[MAX_BLOBS]; // defaults to initial value of 0
+        private static double[] blobXs = new double[MAX_BLOBS];
+        private static double[] blobYs = new double[MAX_BLOBS];
+        private static long[] blobFrames = new long[MAX_BLOBS];
         private static SharpOSC.UDPSender oscSender = new SharpOSC.UDPSender("127.0.0.1", 3333);
 
         public MainCanvas()
@@ -80,8 +81,10 @@ namespace Main
             TouchArea b = (TouchArea)sender;
             Debug.WriteLine("DOWN id: " + e.TouchContact.ID + "X: " + e.TouchContact.Position.X + " Y: " + e.TouchContact.Position.Y);
             int i = 0;
-            while (blobIDs[i] != 0)
+            while ((i < MAX_BLOBS) && (blobIDs[i] != 0))
                 i++;
+            if (i == MAX_BLOBS)
+                return;
             addBlob(i, e);
         }
 
@@ -96,12 +99,14 @@ namespace Main
         void TouchAreaTouchMove(object sender, TouchContactEventArgs e)
         {
             int i = 0;
-            while (blobIDs[i] != e.TouchContact.ID)
+            while ((i < MAX_BLOBS) && (blobIDs[i] != e.TouchContact.ID)) 
                 if (blobIDs[i] == 0)
                 {
                     addBlob(i, e);
                 } else
                 i++;
+            if (i == MAX_BLOBS)
+                return;
             blobIDs[i] = e.TouchContact.ID;
             blobXs[i] = e.TouchContact.Position.X / 1920;
             blobYs[i] = e.TouchContact.Position.Y / 1080;
@@ -114,8 +119,10 @@ namespace Main
         {
             Debug.WriteLine("UP id: " + e.TouchContact.ID + "X: " + e.TouchContact.Position.X + " Y: " + e.TouchContact.Position.Y);
             int i = 0;
-            while (blobIDs[i] != e.TouchContact.ID)
+            while ((i < MAX_BLOBS) && (blobIDs[i] != e.TouchContact.ID))
                 i++;
+            if (i == MAX_BLOBS)
+                return;
             removeBlob(i);
         }
 
